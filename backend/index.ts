@@ -1,29 +1,19 @@
-import "reflect-metadata";
-import {createConnection} from "typeorm";
-import {User} from "./entity/User";
+import "reflect-metadata"
+import path from 'path'
+import express from 'express'
+import router from "./routes"
+import {createConnection} from "typeorm"
+import {User} from "./entity/User"
+import webpack from 'webpack'
 
-const path = require('path'),
-   express = require('express'),
-   webpack = require('webpack'),
-   webpackConfig = require('../webpack.config.js'),
+const webpackConfig = require('../webpack.config.js'),
    app = express(),
    port = process.env.PORT || 3000;
 
 createConnection().then(async connection => {
 
-    // console.log("Inserting a new user into the database...");
-    // const user = new User();
-    // user.firstName = "Timber";
-    // user.lastName = "Saw";
-    // user.age = 25;
-    // await connection.manager.save(user);
-    // console.log("Saved a new user with id: " + user.id);
-    
-    console.log("Loading users from the database...");
     const users = await connection.manager.find(User);
     console.log("Loaded users: ", users);
-     
-    console.log("Here you can setup and run express/koa/any other framework.");
 
     app.listen(port, () => { 
         console.log(`App is listening on port ${port}`) 
@@ -31,9 +21,7 @@ createConnection().then(async connection => {
     
 }).catch(error => console.log(error));
 
-app.get('/', (req: any, res: any) => {
-   res.sendFile(path.resolve(__dirname, '../dist', 'index.html'));
-});
+app.use('/', router)
 
 let compiler = webpack(webpackConfig);
 
