@@ -5,7 +5,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import * as React from 'react';
-import { observer } from '../../node_modules/mobx-react';
+import { observer } from 'mobx-react';
 
 import { IStore } from '../storage/store';
 import TodoItem from './TodoItem'

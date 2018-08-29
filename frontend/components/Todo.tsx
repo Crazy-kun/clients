@@ -14,7 +14,7 @@ export default class Todo extends React.Component<IProps> {
     return (
       <Grid container={true} spacing={16}>
         <Grid item={true} lg={12}>
-          <TodoControl updateList={this.props.store.updateList}/>
+          <TodoControl store={store}/>
         </Grid>
         <Grid item={true} lg={12}>
           <TodoList store={store}/>
