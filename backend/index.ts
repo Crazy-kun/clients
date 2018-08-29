@@ -8,7 +8,11 @@ import webpack from 'webpack'
 
 const webpackConfig = require('../webpack.config.js'),
    app = express(),
+   bodyParser = require("body-parser"),
    port = process.env.PORT || 3000;
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 createConnection().then(async connection => {
 

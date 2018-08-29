@@ -22,6 +22,7 @@ export interface IStore {
     setState(newState: state): void
     updateList(clients: IClient[]): void
     setCurrentClient(client: IClient): void
+    loadLocalClients(): void
 }
 
 class Store implements IStore {
@@ -46,6 +47,13 @@ class Store implements IStore {
     @action
     public setCurrentClient = (client: IClient) => {
         this.currentClient = client
+    }
+
+    @action
+    public loadLocalClients = async () => {
+        const resp = await fetch('/users')
+        const clients = await resp.json()
+        this.clients = clients
     }
 }
 

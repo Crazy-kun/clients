@@ -2,8 +2,8 @@
    "type": "mysql",
    "host": "localhost",
    "port": 3306,
-   "username": "test",
-   "password": "test",
+   "username": "root",
+   "password": "root",
    "database": "test",
    "synchronize": true,
    "logging": false,
@@ -17,8 +17,8 @@
       "backend/subscriber/**/*.ts"
    ],
    "cli": {
-      "entitiesDir": "src/entity",
-      "migrationsDir": "src/migration",
-      "subscribersDir": "src/subscriber"
+      "entitiesDir": "backend/entity",
+      "migrationsDir": "backend/migration",
+      "subscribersDir": "backend/subscriber"
    }
 }

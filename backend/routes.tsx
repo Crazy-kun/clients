@@ -16,4 +16,8 @@ router.get('/test', function(req: Request, res: Response) {
     MainController.test(req, res)
 })
 
+router.post('/saveusers', function(req: Request, res: Response) {
+    MainController.saveUsers(req, res)
+})
+
 export default router
