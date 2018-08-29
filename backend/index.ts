@@ -3,7 +3,6 @@ import path from 'path'
 import express from 'express'
 import router from "./routes"
 import {createConnection} from "typeorm"
-import {User} from "./entity/User"
 import webpack from 'webpack'
 
 const webpackConfig = require('../webpack.config.js'),
@@ -15,9 +14,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 createConnection().then(async connection => {
-
-    const users = await connection.manager.find(User);
-    console.log("Loaded users: ", users);
 
     app.listen(port, () => { 
         console.log(`App is listening on port ${port}`) 

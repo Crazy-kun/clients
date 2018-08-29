@@ -1,4 +1,6 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
+import { City } from './City'
+import { Street } from './Street'
 
 @Entity()
 export class User {
@@ -7,15 +9,20 @@ export class User {
     id!: number;
 
     @Column()
-    name!: string;
+    name!: string
 
     @Column()
-    username!: string;
+    username!: string
 
     @Column()
-    email!: string;
+    email!: string
 
     @Column()
     phone!: string
 
+    @ManyToOne(type => City, city => city.users)
+    city!: City
+
+    @ManyToOne(type => Street, street => street.users)
+    street!: Street
 }
