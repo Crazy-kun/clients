@@ -3,11 +3,11 @@ import Grid from "@material-ui/core/Grid";
 import * as React from "react";
 import { IStore } from "../storage/store";
 import { observer } from "mobx-react";
-import { createStyles } from "@material-ui/core/styles";
-import { Theme } from "@material-ui/core/styles/createMuiTheme";
+import gql from "graphql-tag";
 
 interface IProps {
     store: IStore;
+    client: any;
 }
 
 @observer
@@ -42,18 +42,20 @@ export default class TodoControl extends React.Component<IProps> {
         });
     }
 
-    public test() {
-        fetch("/graphql", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            },
-            body: JSON.stringify({ query: "{ user(id: 1) {name username} }" })
-        })
-            .then(r => r.json())
-            .then(data => console.log(data));
-    }
+    public test = async () => {
+        let resp = await this.props.client.query({
+            query: gql`
+                {
+                    users {
+                        id
+                        name
+                        email
+                    }
+                }
+            `
+        });
+        let users = resp.data.users;
+    };
 
     public render() {
         return (
