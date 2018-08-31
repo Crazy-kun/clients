@@ -4,8 +4,10 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
 import * as React from "react";
 import { IClient, ICity, IStreet, IStore, state } from "../storage/store";
+import { FormControl } from "@material-ui/core";
 
 interface IProps {
     store: IStore;
@@ -130,48 +132,60 @@ export default class TodoItemEdit extends React.Component<IProps, IState> {
                             </Grid>
                             <Grid container={true} justify="center">
                                 <Grid item={true} lg={5}>
-                                    <Select
-                                        value={client.city.id}
-                                        onChange={this.handleSelect}
-                                        inputProps={{
-                                            name: "city"
-                                        }}
-                                    >
-                                        {this.state.cities.map(
-                                            (city, index) => {
-                                                return (
-                                                    <MenuItem
-                                                        value={city.id}
-                                                        key={index}
-                                                    >
-                                                        {city.name}
-                                                    </MenuItem>
-                                                );
-                                            }
-                                        )}
-                                    </Select>
+                                    <FormControl>
+                                        <InputLabel htmlFor="city">
+                                            City
+                                        </InputLabel>
+                                        <Select
+                                            value={client.city.id}
+                                            onChange={this.handleSelect}
+                                            inputProps={{
+                                                name: "city",
+                                                id: "city"
+                                            }}
+                                        >
+                                            {this.state.cities.map(
+                                                (city, index) => {
+                                                    return (
+                                                        <MenuItem
+                                                            value={city.id}
+                                                            key={index}
+                                                        >
+                                                            {city.name}
+                                                        </MenuItem>
+                                                    );
+                                                }
+                                            )}
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                                 <Grid item={true} lg={5}>
-                                    <Select
-                                        value={client.street.id}
-                                        onChange={this.handleSelect}
-                                        inputProps={{
-                                            name: "street"
-                                        }}
-                                    >
-                                        {this.state.streets.map(
-                                            (street, index) => {
-                                                return (
-                                                    <MenuItem
-                                                        value={street.id}
-                                                        key={index}
-                                                    >
-                                                        {street.name}
-                                                    </MenuItem>
-                                                );
-                                            }
-                                        )}
-                                    </Select>
+                                    <FormControl>
+                                        <InputLabel htmlFor="street">
+                                            Street
+                                        </InputLabel>
+                                        <Select
+                                            value={client.street.id}
+                                            onChange={this.handleSelect}
+                                            inputProps={{
+                                                name: "street",
+                                                id: "street"
+                                            }}
+                                        >
+                                            {this.state.streets.map(
+                                                (street, index) => {
+                                                    return (
+                                                        <MenuItem
+                                                            value={street.id}
+                                                            key={index}
+                                                        >
+                                                            {street.name}
+                                                        </MenuItem>
+                                                    );
+                                                }
+                                            )}
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                             </Grid>
                         </Paper>

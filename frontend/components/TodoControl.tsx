@@ -3,6 +3,8 @@ import Grid from "@material-ui/core/Grid";
 import * as React from "react";
 import { IStore } from "../storage/store";
 import { observer } from "mobx-react";
+import { createStyles } from "@material-ui/core/styles";
+import { Theme } from "@material-ui/core/styles/createMuiTheme";
 
 interface IProps {
     store: IStore;
@@ -40,6 +42,19 @@ export default class TodoControl extends React.Component<IProps> {
         });
     }
 
+    public test() {
+        fetch("/graphql", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            },
+            body: JSON.stringify({ query: "{ user(id: 1) {name username} }" })
+        })
+            .then(r => r.json())
+            .then(data => console.log(data));
+    }
+
     public render() {
         return (
             <Grid container={true}>
@@ -58,7 +73,7 @@ export default class TodoControl extends React.Component<IProps> {
                         color="primary"
                         onClick={this.saveHandleButton}
                     >
-                        Save local
+                        Save
                     </Button>
                 </Grid>
                 <Grid item={true} md={2}>
@@ -68,6 +83,15 @@ export default class TodoControl extends React.Component<IProps> {
                         onClick={this.loadHandleButton}
                     >
                         Load local
+                    </Button>
+                </Grid>
+                <Grid item={true} md={2}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={this.test}
+                    >
+                        Graphql test
                     </Button>
                 </Grid>
             </Grid>
