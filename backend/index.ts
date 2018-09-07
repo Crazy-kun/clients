@@ -5,6 +5,7 @@ import router from "./routes";
 import { createConnection } from "typeorm";
 import webpack from "webpack";
 import { schema, root } from "./graphql/schema";
+import RabbitMQ from "./amqp/index";
 
 const webpackConfig = require("../webpack.config.js"),
     app = express(),
@@ -21,6 +22,7 @@ createConnection()
         app.listen(port, () => {
             console.log(`App is listening on port ${port}`);
         });
+        RabbitMQ.createConnection();
     })
     .catch(error => console.log(error));
 

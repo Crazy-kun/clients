@@ -40,15 +40,7 @@ class Store implements IStore {
     @observable
     public appState: state = state.clientList;
 
-    public currentClient: IClient = {
-        id: "",
-        name: "",
-        username: "",
-        email: "",
-        phone: "",
-        city: { id: "", name: "" },
-        street: { id: "", name: "" }
-    };
+    public currentClient!: IClient;
 
     @observable
     public clients: IClient[] = [];

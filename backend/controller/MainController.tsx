@@ -3,6 +3,7 @@ import { getRepository } from "typeorm";
 import { City } from "../entity/City";
 import { Street } from "../entity/Street";
 import path from "path";
+import RabbitMQ from "../amqp/index";
 
 class MainController {
     index(req: Request, res: Response) {
@@ -16,6 +17,13 @@ class MainController {
     async streets(req: Request, res: Response) {
         let streets = await getRepository(Street).find();
         res.json(streets);
+    }
+
+    rabbit(req: Request, res: Response) {
+        let msg = req.body.msg;
+        console.log(msg);
+        RabbitMQ.sendMessage("hello", msg);
+        res.json("Sent");
     }
 }
 

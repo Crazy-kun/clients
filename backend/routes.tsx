@@ -9,6 +9,10 @@ router.get("/", function(req: Request, res: Response) {
     MainController.index(req, res);
 });
 
+router.post("/rabbitmq", function(req: Request, res: Response) {
+    MainController.rabbit(req, res);
+});
+
 router.get("/users", function(req: Request, res: Response) {
     UserController.users(req, res);
 });
