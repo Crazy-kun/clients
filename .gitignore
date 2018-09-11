@@ -24,3 +24,6 @@ yarn-debug.log*
 yarn-error.log*
 typescript-react.code-workspace
 yarn.lock
+
+#docker
+/docker/mariadb

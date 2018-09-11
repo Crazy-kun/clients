@@ -5,7 +5,7 @@ class RabbitMQ {
 
     createConnection() {
         amqp.connect(
-            "amqp://root:root@localhost:5672",
+            "" + process.env.AMQP_HOST,
             (err, conn) => {
                 this.connection = conn;
             }

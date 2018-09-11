@@ -2,7 +2,8 @@ import "reflect-metadata";
 import path from "path";
 import express from "express";
 import router from "./routes";
-import { createConnection } from "typeorm";
+import { createConnection, ConnectionOptions } from "typeorm";
+import ORMConfig from "../configs/ORMconfig";
 import webpack from "webpack";
 import { schema, root } from "./graphql/schema";
 import RabbitMQ from "./amqp/index";
@@ -17,12 +18,14 @@ const webpackConfig = require("../webpack.config.js"),
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-createConnection()
+createConnection(<ConnectionOptions>ORMConfig)
     .then(async connection => {
+        console.log("DB connection success");
         app.listen(port, () => {
             console.log(`App is listening on port ${port}`);
         });
         RabbitMQ.createConnection();
+        console.log("RabbitMQ connection success");
     })
     .catch(error => console.log(error));
 

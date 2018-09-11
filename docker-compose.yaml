@@ -1,6 +1,23 @@
 version: "3.1"
 
 services:
+    app:
+        build: .
+        restart: always
+        ports:
+            - 3000:3000
+        volumes:
+            - ./backend:/var/www/backend
+            - ./configs:/var/www/configs
+            - ./frontend:/var/www/frontend
+        environment:
+            MYSQL_SERVER: db
+            MYSQL_DATABASE: test
+            MYSQL_PORT: 3306
+            MYSQL_USERNAME: root
+            MYSQL_PASSWORD: root
+            AMQP_HOST: amqp://root:root@amqp
+
     db:
         image: mariadb
         restart: always
@@ -14,6 +31,7 @@ services:
         restart: always
         ports:
             - 8080:8080
+
     amqp:
         image: rabbitmq:3.7.6-management
         ports:
