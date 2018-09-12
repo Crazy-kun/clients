@@ -9,9 +9,6 @@
 # production
 /dist
 
-#db
-ormconfig.json
-
 # misc
 .DS_Store
 .env.local
@@ -24,6 +21,7 @@ yarn-debug.log*
 yarn-error.log*
 typescript-react.code-workspace
 yarn.lock
+package-lock.json
 
 #docker
 /docker/mariadb

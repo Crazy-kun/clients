@@ -21,8 +21,7 @@ class MainController {
 
     rabbit(req: Request, res: Response) {
         let msg = req.body.msg;
-        console.log(msg);
-        RabbitMQ.sendMessage("hello", msg);
+        RabbitMQ.sendMessageAdv(msg, 'logs', 'clients.logs.info')
         res.json("Sent");
     }
 }

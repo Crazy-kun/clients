@@ -19,6 +19,14 @@ class RabbitMQ {
             ch.close();
         });
     }
+
+    sendMessageAdv(msg: string, exchange: string, routingKey: string) {
+        this.connection.createChannel((err: any, ch: any) => {
+            ch.assertExchange(exchange, 'topic')
+            ch.publish(exchange, routingKey, Buffer.from(msg))
+            ch.close()
+        });
+    }
 }
 
 export default new RabbitMQ();
