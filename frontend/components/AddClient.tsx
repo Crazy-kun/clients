@@ -8,6 +8,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import * as React from "react";
 import { IClient, ICity, IStreet, IStore, state } from "../storage/store";
 import { FormControl } from "@material-ui/core";
+import { createStyles } from "@material-ui/core";
 import { inject } from "mobx-react";
 
 interface IProps {
@@ -20,12 +21,29 @@ interface IState {
     streets: IStreet[];
 }
 
+const styles = createStyles({
+    button: {
+        marginRight: 10
+    },
+    select: {
+        marginBottom: 20
+    }
+});
+
 @inject("store")
-export default class TodoItemEdit extends React.Component<IProps, IState> {
+export default class AddClient extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
-            tempClient: this.props.store!.currentClient,
+            tempClient: {
+                id: "",
+                city: { id: "", name: "" },
+                email: "",
+                name: "",
+                phone: "",
+                street: { id: "", name: "" },
+                username: ""
+            },
             cities: [],
             streets: []
         };
@@ -51,6 +69,7 @@ export default class TodoItemEdit extends React.Component<IProps, IState> {
     public buttonHandle = () => {
         this.props.store!.setCurrentClient(this.state.tempClient);
         this.props.store!.setState(state.clientList);
+        this.props.store!.addClient();
     };
 
     public handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -82,6 +101,7 @@ export default class TodoItemEdit extends React.Component<IProps, IState> {
                         <Button
                             variant="contained"
                             color="primary"
+                            style={styles.button}
                             onClick={this.buttonHandle}
                         >
                             Back
@@ -169,6 +189,7 @@ export default class TodoItemEdit extends React.Component<IProps, IState> {
                                         <Select
                                             value={client.street.id}
                                             onChange={this.handleSelect}
+                                            style={styles.select}
                                             inputProps={{
                                                 name: "street",
                                                 id: "street"

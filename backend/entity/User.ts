@@ -1,28 +1,27 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
-import { City } from './City'
-import { Street } from './Street'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { City } from "./City";
+import { Street } from "./Street";
 
 @Entity()
 export class User {
-
     @PrimaryGeneratedColumn()
     id!: number;
 
     @Column()
-    name!: string
+    name!: string;
 
     @Column()
-    username!: string
+    username!: string;
 
     @Column()
-    email!: string
+    email!: string;
 
     @Column()
-    phone!: string
+    phone!: string;
 
     @ManyToOne(type => City, city => city.users)
-    city!: City
+    city!: City;
 
     @ManyToOne(type => Street, street => street.users)
-    street!: Street
+    street!: Street;
 }

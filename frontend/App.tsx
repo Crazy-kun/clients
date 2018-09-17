@@ -12,6 +12,7 @@ import { observer } from "../node_modules/mobx-react";
 import Todo from "./components/Todo";
 import Auth from "./components/Auth";
 import TodoItemEdit from "./components/TodoItemEdit";
+import AddClient from "./components/AddClient";
 import { IStore, state } from "./storage/store";
 
 interface IProps {
@@ -65,26 +66,30 @@ class App extends React.Component<IProps, IState> {
 
         switch (store.appState) {
             case state.auth:
-                view = <Auth store={store} />;
+                view = <Auth />;
                 break;
 
             case state.clientEdit:
-                view = <TodoItemEdit store={store} />;
+                view = <TodoItemEdit />;
+                break;
+
+            case state.clientAdd:
+                view = <AddClient />;
                 break;
 
             case state.clientList:
-                view = <Todo store={store} client={this.props.client} />;
+                view = <Todo client={this.props.client} />;
                 break;
 
             default:
-                view = <Todo store={store} client={this.props.client} />;
+                view = <Todo client={this.props.client} />;
                 break;
         }
 
         return (
             <div>
                 <Grid container={true} spacing={16}>
-                    <Grid item={true} lg={12}>
+                    <Grid item={true} sm={12}>
                         <AppBar position="static">
                             <Toolbar>
                                 <IconButton color="inherit" aria-label="Menu">

@@ -3,7 +3,8 @@ import { action, observable } from "mobx";
 export enum state {
     clientList = "Client list",
     clientEdit = "Edit client",
-    auth = "Authentication"
+    auth = "Authentication",
+    clientAdd = "Adding new client"
 }
 
 export interface IClient {
@@ -32,10 +33,14 @@ export interface IStore {
     username: string;
     currentClient: IClient;
     clients: IClient[];
+    rowsPerPage: number;
+    page: number;
+    rowsCount: number;
     setState(newState: state): void;
     updateList(clients: IClient[]): void;
     setCurrentClient(client: IClient): void;
     loadLocalClients(): void;
+    addClient(): void;
 }
 
 class Store implements IStore {
@@ -49,6 +54,15 @@ class Store implements IStore {
 
     @observable
     public clients: IClient[] = [];
+
+    @observable
+    public rowsPerPage: number = 5;
+
+    @observable
+    public page: number = 0;
+
+    @observable
+    public rowsCount: number = 0;
 
     @action
     public setState = (newState: state) => {
@@ -67,9 +81,23 @@ class Store implements IStore {
 
     @action
     public loadLocalClients = async () => {
-        const resp = await fetch("/users");
+        const resp = await fetch(
+            `/users?count=${this.rowsPerPage}&page=${this.page}`
+        );
         const clients = await resp.json();
-        this.clients = clients;
+        this.clients = clients.users;
+        this.rowsCount = clients.count;
+    };
+
+    @action
+    public addClient = () => {
+        if (
+            this.currentClient.name != "" &&
+            this.currentClient.username != "" &&
+            this.currentClient.email != ""
+        ) {
+            this.clients.push(this.currentClient);
+        }
     };
 }
 

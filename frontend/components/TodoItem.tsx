@@ -7,15 +7,15 @@ import { observer } from "mobx-react";
 
 interface IProps {
     client: IClient;
-    store: IStore;
+    store?: IStore;
 }
 
 @inject("store")
 @observer
 export default class TodoItem extends React.Component<IProps> {
     public rowClickHandle = (e: any) => {
-        this.props.store.setCurrentClient(this.props.client);
-        this.props.store.setState(state.clientEdit);
+        this.props.store!.setCurrentClient(this.props.client);
+        this.props.store!.setState(state.clientEdit);
     };
 
     public render() {

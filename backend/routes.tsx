@@ -27,7 +27,7 @@ router.post("/rabbitmq", function(req: Request, res: Response) {
 });
 
 router.get("/users", function(req: Request, res: Response) {
-    UserController.users(req, res);
+    UserController.usersPagination(req, res);
 });
 
 router.get("/cities", function(req: Request, res: Response) {

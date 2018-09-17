@@ -6,9 +6,11 @@ import { IStore } from "../storage/store";
 import { observer } from "mobx-react";
 import gql from "graphql-tag";
 import * as _ from "lodash";
+import { createStyles } from "@material-ui/core";
+import { inject } from "mobx-react";
 
 interface IProps {
-    store: IStore;
+    store?: IStore;
     client: any;
 }
 
@@ -16,6 +18,13 @@ interface IState {
     msg: string;
 }
 
+const styles = createStyles({
+    button: {
+        marginRight: 20
+    }
+});
+
+@inject("store")
 @observer
 export default class TodoControl extends React.Component<IProps, IState> {
     constructor(props: IProps) {
@@ -30,15 +39,15 @@ export default class TodoControl extends React.Component<IProps, IState> {
     public async updateHandleButton() {
         const resp = await fetch("https://jsonplaceholder.typicode.com/users");
         const clients = await resp.json();
-        this.props.store.updateList(clients);
+        this.props.store!.updateList(clients);
     }
 
     public loadHandleButton = () => {
-        this.props.store.loadLocalClients();
+        this.props.store!.loadLocalClients();
     };
 
     public async saveHandleButton() {
-        const users = this.props.store.clients.slice();
+        const users = this.props.store!.clients.slice();
         await fetch("/saveusers", {
             headers: {
                 Accept: "application/json",
@@ -90,43 +99,41 @@ export default class TodoControl extends React.Component<IProps, IState> {
     public render() {
         return (
             <Grid container={true}>
-                <Grid item={true} md={1}>
+                <Grid item={true} sm={12}>
                     <Button
                         variant="contained"
                         color="primary"
+                        style={styles.button}
                         onClick={this.updateHandleButton}
                     >
                         Update
                     </Button>
-                </Grid>
-                <Grid item={true} md={1}>
                     <Button
                         variant="contained"
                         color="primary"
+                        style={styles.button}
                         onClick={this.saveHandleButton}
                     >
                         Save
                     </Button>
-                </Grid>
-                <Grid item={true} md={2}>
                     <Button
                         variant="contained"
                         color="primary"
+                        style={styles.button}
                         onClick={this.loadHandleButton}
                     >
                         Load local
                     </Button>
-                </Grid>
-                <Grid item={true} md={2}>
                     <Button
                         variant="contained"
                         color="primary"
+                        style={styles.button}
                         onClick={this.test}
                     >
                         Graphql test
                     </Button>
                 </Grid>
-                <Grid item={true} md={4}>
+                <Grid item={true} sm={4}>
                     <TextField
                         id="message"
                         label="Message"

@@ -5,9 +5,10 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { IStore, state } from "../storage/store";
+import { inject } from "mobx-react";
 
 interface IProps {
-    store: IStore;
+    store?: IStore;
 }
 
 interface IState {
@@ -16,6 +17,7 @@ interface IState {
     msg: string;
 }
 
+@inject("store")
 export default class Auth extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -39,8 +41,8 @@ export default class Auth extends React.Component<IProps, IState> {
         });
         res = await res.json();
         if (res) {
-            this.props.store.username = this.state.username;
-            this.props.store.appState = state.clientList;
+            this.props.store!.username = this.state.username;
+            this.props.store!.appState = state.clientList;
         } else {
             this.setState({
                 msg: "Incorrect login or password"

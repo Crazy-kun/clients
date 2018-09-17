@@ -17,13 +17,24 @@ class UserModel {
         return user;
     };
 
-    getUsers = () => {
+    getUsers = (count: number = 25, page: number = 0) => {
         let users = getRepository(User)
             .createQueryBuilder("user")
             .leftJoinAndSelect("user.city", "city")
             .leftJoinAndSelect("user.street", "street")
+            .limit(count)
+            .offset(count * page)
             .getMany();
+
         return users;
+    };
+
+    getUsersCount = () => {
+        let count = getRepository(User)
+            .createQueryBuilder("user")
+            .getCount();
+
+        return count;
     };
 
     saveUser = async (usr: IUser) => {

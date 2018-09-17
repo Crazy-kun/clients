@@ -19,6 +19,7 @@ class AuthController {
         if (req.session) {
             req.session.username = "";
         }
+        console.log("Logged out");
         res.json(true);
     }
 
