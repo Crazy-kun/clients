@@ -1,0 +1,2 @@
+{"_id":"admin.root","user":"root","db":"admin","credentials":{"SCRAM-SHA-1":{"iterationCount":10000,"salt":"3ldIfdkOWxHLTK9xqqwZaA==","storedKey":"X0q0oQptc1VUktLJsqNPqzufjww=","serverKey":"K2UpJgysD/dNimbgFGcSAp2p0WY="}},"roles":[{"role":"root","db":"admin"}]}
+{"_id":"clients_session.test","user":"test","db":"clients_session","credentials":{"SCRAM-SHA-1":{"iterationCount":10000,"salt":"AQviJazAoKUU7pl05aZMqw==","storedKey":"kyAXYFvdGwotN5XFz9dgKdiBioE=","serverKey":"tmFpohW8qJJQPgMr951n/vHgCwI="}},"roles":[{"role":"readWrite","db":"clients_session"}]}

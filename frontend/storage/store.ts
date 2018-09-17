@@ -2,7 +2,8 @@ import { action, observable } from "mobx";
 
 export enum state {
     clientList = "Client list",
-    clientEdit = "Edit client"
+    clientEdit = "Edit client",
+    auth = "Authentication"
 }
 
 export interface IClient {
@@ -28,6 +29,7 @@ export interface IStreet {
 
 export interface IStore {
     appState: state;
+    username: string;
     currentClient: IClient;
     clients: IClient[];
     setState(newState: state): void;
@@ -38,7 +40,10 @@ export interface IStore {
 
 class Store implements IStore {
     @observable
-    public appState: state = state.clientList;
+    public appState: state = state.auth;
+
+    @observable
+    public username: string = "";
 
     public currentClient!: IClient;
 

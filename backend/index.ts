@@ -7,17 +7,37 @@ import ORMConfig from "../configs/ORMconfig";
 import webpack from "webpack";
 import { schema, root } from "./graphql/schema";
 import RabbitMQ from "./amqp/index";
+import session from "express-session";
 
 const webpackConfig = require("../webpack.config.js"),
     app = express(),
     bodyParser = require("body-parser"),
     expressGraphQL = require("express-graphql"),
-    { buildSchema } = require("graphql"),
+    MongoStore = require("connect-mongo")(session),
     port = process.env.PORT || 3000;
 
+//Bodyparser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+//Sessions
+app.use(
+    session({
+        secret: "foo",
+        store: new MongoStore({
+            url: `mongodb://${process.env.MONGO_USER}:${
+                process.env.MONGO_PASSWORD
+            }@${process.env.MONGO_HOST}/clients_session`
+        })
+    })
+);
+
+app.use("/users", function(req, res, next) {
+    console.log("Request Type:", req.method);
+    next();
+});
+
+//Database connection
 createConnection(<ConnectionOptions>ORMConfig)
     .then(async connection => {
         console.log("DB connection success");
@@ -29,6 +49,7 @@ createConnection(<ConnectionOptions>ORMConfig)
     })
     .catch(error => console.log(error));
 
+//GraphQL
 app.use(
     "/graphql",
     expressGraphQL({
@@ -38,8 +59,10 @@ app.use(
     })
 );
 
+//Express router
 app.use("/", router);
 
+//Hot module replacement
 let compiler = webpack(webpackConfig);
 
 app.use(

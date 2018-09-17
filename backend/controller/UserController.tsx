@@ -8,10 +8,23 @@ class UserController {
     async users(req: Request, res: Response) {
         let users = await UserModel.getUsers();
 
-        let date = new Date()
-        let dateStr = '[' + date.getFullYear() + '.' + date.getMonth() + '.' + date.getDay() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + '] '
-        let msg = dateStr + 'users was loaded'
-        RabbitMQ.sendMessageAdv(msg, 'logs', 'clients.logs.info')
+        let date = new Date();
+        let dateStr =
+            "[" +
+            date.getFullYear() +
+            "." +
+            date.getMonth() +
+            "." +
+            date.getDay() +
+            " " +
+            date.getHours() +
+            ":" +
+            date.getMinutes() +
+            ":" +
+            date.getSeconds() +
+            "] ";
+        let msg = dateStr + "users was loaded";
+        RabbitMQ.sendMessageAdv(msg, "logs", "clients.logs.info");
 
         res.json(users);
     }
@@ -24,10 +37,23 @@ class UserController {
             userRep.save(client);
         });
 
-        let date = new Date()
-        let dateStr = '[' + date.getFullYear() + '.' + date.getMonth() + '.' + date.getDay() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + '] '
-        let msg = dateStr + 'users was saved'
-        RabbitMQ.sendMessageAdv(msg, 'logs', 'clients.logs.warn')
+        let date = new Date();
+        let dateStr =
+            "[" +
+            date.getFullYear() +
+            "." +
+            date.getMonth() +
+            "." +
+            date.getDay() +
+            " " +
+            date.getHours() +
+            ":" +
+            date.getMinutes() +
+            ":" +
+            date.getSeconds() +
+            "] ";
+        let msg = dateStr + "users was saved";
+        RabbitMQ.sendMessageAdv(msg, "logs", "clients.logs.warn");
 
         res.send(true);
     }
