@@ -8,6 +8,8 @@ import webpack from "webpack";
 import { schema, root } from "./graphql/schema";
 import RabbitMQ from "./amqp/index";
 import session from "express-session";
+import http from "http";
+import sock from "socket.io";
 
 const webpackConfig = require("../webpack.config.js"),
     app = express(),
@@ -37,11 +39,27 @@ app.use("/users", function(req, res, next) {
     next();
 });
 
+//WebSocket
+const server = http.createServer(app);
+const io = sock(server);
+io.on("connection", function(socket: sock.Socket) {
+    socket.on("message", (data: any) => {
+        console.log(`Message from client ${socket.id}: `, data);
+        io.emit("msg", {
+            id: socket.id,
+            text: data.text,
+            username: data.username
+        });
+    });
+});
+
+io.emit("msg", "BROADCAST");
+
 //Database connection
 createConnection(<ConnectionOptions>ORMConfig)
     .then(async connection => {
         console.log("DB connection success");
-        app.listen(port, () => {
+        server.listen(port, () => {
             console.log(`App is listening on port ${port}`);
         });
         RabbitMQ.createConnection();

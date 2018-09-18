@@ -1,10 +1,13 @@
 import { action, observable } from "mobx";
+import io from "socket.io-client";
+import _ from "lodash";
 
 export enum state {
     clientList = "Client list",
     clientEdit = "Edit client",
+    clientAdd = "Adding new client",
     auth = "Authentication",
-    clientAdd = "Adding new client"
+    chat = "Websocket chat"
 }
 
 export interface IClient {
@@ -28,6 +31,12 @@ export interface IStreet {
     name: string;
 }
 
+export interface IMessage {
+    id: string;
+    username: string;
+    text: string;
+}
+
 export interface IStore {
     appState: state;
     username: string;
@@ -36,11 +45,14 @@ export interface IStore {
     rowsPerPage: number;
     page: number;
     rowsCount: number;
+    socket: any;
+    messages: IMessage[];
     setState(newState: state): void;
     updateList(clients: IClient[]): void;
     setCurrentClient(client: IClient): void;
     loadLocalClients(): void;
     addClient(): void;
+    handleMessage(message: IMessage): void;
 }
 
 class Store implements IStore {
@@ -63,6 +75,11 @@ class Store implements IStore {
 
     @observable
     public rowsCount: number = 0;
+
+    public socket: any = io("http://localhost:3000");
+
+    @observable
+    public messages: IMessage[] = [];
 
     @action
     public setState = (newState: state) => {
@@ -97,6 +114,14 @@ class Store implements IStore {
             this.currentClient.email != ""
         ) {
             this.clients.push(this.currentClient);
+        }
+    };
+
+    @action
+    public handleMessage = (message: IMessage) => {
+        this.messages.push(message);
+        if (this.messages.length > 10) {
+            this.messages = _.tail(this.messages);
         }
     };
 }

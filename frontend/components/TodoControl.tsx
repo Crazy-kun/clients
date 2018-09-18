@@ -2,12 +2,13 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import * as React from "react";
-import { IStore } from "../storage/store";
+import { IStore, state } from "../storage/store";
 import { observer } from "mobx-react";
 import gql from "graphql-tag";
 import * as _ from "lodash";
 import { createStyles } from "@material-ui/core";
 import { inject } from "mobx-react";
+import MsgDialog from "./MsgDialog";
 
 interface IProps {
     store?: IStore;
@@ -16,6 +17,9 @@ interface IProps {
 
 interface IState {
     msg: string;
+    wsMsg: string;
+    srvMsg: string;
+    open: boolean;
 }
 
 const styles = createStyles({
@@ -30,11 +34,21 @@ export default class TodoControl extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
-            msg: ""
+            msg: "",
+            wsMsg: "",
+            srvMsg: "",
+            open: false
         };
         this.updateHandleButton = this.updateHandleButton.bind(this);
         this.saveHandleButton = this.saveHandleButton.bind(this);
     }
+
+    public closeMsg = () => {
+        this.setState({
+            open: false,
+            srvMsg: ""
+        });
+    };
 
     public async updateHandleButton() {
         const resp = await fetch("https://jsonplaceholder.typicode.com/users");
@@ -75,9 +89,19 @@ export default class TodoControl extends React.Component<IProps, IState> {
         let users = resp.data.users;
     };
 
+    public chat = () => {
+        this.props.store!.setState(state.chat);
+    };
+
     public onMessageChange = (e: any) => {
         this.setState({
             msg: e.target.value
+        });
+    };
+
+    public onWsMessageChange = (e: any) => {
+        this.setState({
+            wsMsg: e.target.value
         });
     };
 
@@ -94,6 +118,13 @@ export default class TodoControl extends React.Component<IProps, IState> {
         });
         let response = await resp.json();
         console.log(response);
+    };
+
+    public wsTest = () => {
+        this.props.store!.socket.emit("message", this.state.wsMsg);
+        this.setState({
+            wsMsg: ""
+        });
     };
 
     public render() {
@@ -132,6 +163,14 @@ export default class TodoControl extends React.Component<IProps, IState> {
                     >
                         Graphql test
                     </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={styles.button}
+                        onClick={this.chat}
+                    >
+                        Chat
+                    </Button>
                 </Grid>
                 <Grid item={true} sm={4}>
                     <TextField
@@ -149,6 +188,27 @@ export default class TodoControl extends React.Component<IProps, IState> {
                         RabbitMQ test
                     </Button>
                 </Grid>
+                <Grid item={true} sm={4}>
+                    <TextField
+                        id="wsmsg"
+                        label="message"
+                        value={this.state.wsMsg}
+                        onChange={this.onWsMessageChange}
+                        margin="normal"
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={this.wsTest}
+                    >
+                        WebSocket test
+                    </Button>
+                </Grid>
+                <MsgDialog
+                    open={this.state.open}
+                    message={this.state.srvMsg}
+                    closeMsg={this.closeMsg}
+                />
             </Grid>
         );
     }

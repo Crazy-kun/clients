@@ -13,6 +13,7 @@ import Todo from "./components/Todo";
 import Auth from "./components/Auth";
 import TodoItemEdit from "./components/TodoItemEdit";
 import AddClient from "./components/AddClient";
+import Chat from "./components/Chat";
 import { IStore, state } from "./storage/store";
 
 interface IProps {
@@ -33,7 +34,12 @@ class App extends React.Component<IProps, IState> {
             menuOpen: false,
             anchorEL: null
         };
+
+        this.props.store.socket.on("msg", (msg: any) => {
+            this.props.store.handleMessage(msg);
+        });
     }
+
     public componentDidMount = async () => {
         let res = await fetch("/checkauth");
         let resp = await res.json();
@@ -79,6 +85,10 @@ class App extends React.Component<IProps, IState> {
 
             case state.clientList:
                 view = <Todo client={this.props.client} />;
+                break;
+
+            case state.chat:
+                view = <Chat />;
                 break;
 
             default:
