@@ -47,6 +47,9 @@ export interface IStore {
     rowsCount: number;
     socket: any;
     messages: IMessage[];
+    unreadMessages: number;
+    newMessage: IMessage;
+    snackbarOpen: boolean;
     setState(newState: state): void;
     updateList(clients: IClient[]): void;
     setCurrentClient(client: IClient): void;
@@ -80,6 +83,14 @@ class Store implements IStore {
 
     @observable
     public messages: IMessage[] = [];
+
+    @observable
+    public unreadMessages: number = 0;
+
+    @observable
+    public snackbarOpen: boolean = false;
+
+    public newMessage: IMessage = { id: "", text: "", username: "" };
 
     @action
     public setState = (newState: state) => {
@@ -122,6 +133,11 @@ class Store implements IStore {
         this.messages.push(message);
         if (this.messages.length > 10) {
             this.messages = _.tail(this.messages);
+        }
+        if (this.appState != state.chat) {
+            this.unreadMessages++;
+            this.snackbarOpen = true;
+            this.newMessage = message;
         }
     };
 }

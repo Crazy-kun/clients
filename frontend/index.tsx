@@ -13,7 +13,7 @@ const client = new ApolloClient({
 
 ReactDOM.render(
     <Provider store={Store}>
-        <App store={Store} client={client} />
+        <App client={client} />
     </Provider>,
     document.getElementById("root") as HTMLElement
 );

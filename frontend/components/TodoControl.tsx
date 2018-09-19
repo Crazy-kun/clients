@@ -1,4 +1,5 @@
 import Button from "@material-ui/core/Button";
+import Badge from "@material-ui/core/Badge";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import * as React from "react";
@@ -128,6 +129,21 @@ export default class TodoControl extends React.Component<IProps, IState> {
     };
 
     public render() {
+        let chatButton = (
+            <Button variant="contained" color="primary" onClick={this.chat}>
+                Chat
+            </Button>
+        );
+        if (this.props.store!.unreadMessages != 0) {
+            chatButton = (
+                <Badge
+                    color="secondary"
+                    badgeContent={this.props.store!.unreadMessages}
+                >
+                    {chatButton}
+                </Badge>
+            );
+        }
         return (
             <Grid container={true}>
                 <Grid item={true} sm={12}>
@@ -163,14 +179,7 @@ export default class TodoControl extends React.Component<IProps, IState> {
                     >
                         Graphql test
                     </Button>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        style={styles.button}
-                        onClick={this.chat}
-                    >
-                        Chat
-                    </Button>
+                    {chatButton}
                 </Grid>
                 <Grid item={true} sm={4}>
                     <TextField

@@ -1,4 +1,5 @@
 import AppBar from "@material-ui/core/AppBar";
+import Snackbar from "@material-ui/core/Snackbar";
 import Grid from "@material-ui/core/Grid";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
@@ -15,9 +16,10 @@ import TodoItemEdit from "./components/TodoItemEdit";
 import AddClient from "./components/AddClient";
 import Chat from "./components/Chat";
 import { IStore, state } from "./storage/store";
+import { inject } from "mobx-react";
 
 interface IProps {
-    store: IStore;
+    store?: IStore;
     client: any;
 }
 
@@ -26,17 +28,21 @@ interface IState {
     anchorEL: null;
 }
 
+let store: IStore;
+
+@inject("store")
 @observer
 class App extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
+        store = this.props.store!;
         this.state = {
             menuOpen: false,
             anchorEL: null
         };
 
-        this.props.store.socket.on("msg", (msg: any) => {
-            this.props.store.handleMessage(msg);
+        this.props.store!.socket.on("msg", (msg: any) => {
+            store.handleMessage(msg);
         });
     }
 
@@ -44,8 +50,8 @@ class App extends React.Component<IProps, IState> {
         let res = await fetch("/checkauth");
         let resp = await res.json();
         if (resp.check) {
-            this.props.store.appState = state.clientList;
-            this.props.store.username = resp.username;
+            store.appState = state.clientList;
+            store.username = resp.username;
         }
     };
 
@@ -62,12 +68,19 @@ class App extends React.Component<IProps, IState> {
             menuOpen: false,
             anchorEL: null
         });
-        this.props.store.username = "";
-        this.props.store.appState = state.auth;
+        store.username = "";
+        store.appState = state.auth;
+    };
+
+    public handleSnackbarClose = () => {
+        store.snackbarOpen = false;
+    };
+
+    public handleSnackbarClick = () => {
+        store.appState = state.chat;
     };
 
     public render() {
-        const store = this.props.store;
         let view: any;
 
         switch (store.appState) {
@@ -116,7 +129,7 @@ class App extends React.Component<IProps, IState> {
                                     color="inherit"
                                     onClick={this.handleMenu}
                                 >
-                                    {this.props.store.username}
+                                    {store.username}
                                 </Button>
                                 <Menu
                                     id="menu-appbar"
@@ -143,6 +156,40 @@ class App extends React.Component<IProps, IState> {
                         {view}
                     </Grid>
                 </Grid>
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "left"
+                    }}
+                    open={store.snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={this.handleSnackbarClose}
+                    ContentProps={{
+                        "aria-describedby": "message-id"
+                    }}
+                    message={
+                        <div>
+                            <span id="message-id">{store.newMessage.text}</span>
+                            <Typography
+                                variant="caption"
+                                color="secondary"
+                                gutterBottom
+                            >
+                                {store.newMessage.username}
+                            </Typography>
+                        </div>
+                    }
+                    action={[
+                        <Button
+                            key="undo"
+                            color="primary"
+                            size="small"
+                            onClick={this.handleSnackbarClick}
+                        >
+                            <span style={{ color: "white" }}>OPEN</span>
+                        </Button>
+                    ]}
+                />
             </div>
         );
     }

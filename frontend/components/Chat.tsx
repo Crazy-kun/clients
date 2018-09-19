@@ -38,6 +38,7 @@ export default class Chat extends React.Component<IProps, IState> {
         this.state = {
             message: ""
         };
+        this.props.store!.unreadMessages = 0;
     }
     public buttonHandle = () => {
         this.props.store!.setState(state.clientList);
